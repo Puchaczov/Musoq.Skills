@@ -1,0 +1,6 @@
+WITH RECURSIVE steps AS (
+ SELECT 1 AS N FROM system.dual()
+ UNION ALL
+ SELECT s.N + 1 AS N FROM steps s WHERE s.N < 3
+)
+SELECT N FROM steps ORDER BY N
