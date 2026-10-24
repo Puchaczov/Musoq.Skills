@@ -1,0 +1,5 @@
+interface:
+  display_name: "Musoq Interpretation"
+  short_description: "Author and reverse engineer binary and text schemas"
+policy:
+  allow_implicit_invocation: true

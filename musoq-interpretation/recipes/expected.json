@@ -1,0 +1,12 @@
+{
+  "binary-records.sql": {"rows": [{"Count": 2, "Size": 2, "Id": 7, "Value": 4660, "Trailer": 238}, {"Count": 2, "Size": 2, "Id": 9, "Value": 258, "Trailer": 238}]},
+  "text-variants.sql": {"rows": [{"Id": 1, "Trace": null, "Kind": "I", "Message": "ready"}, {"Id": 2, "Trace": "trace-7", "Kind": "W", "Message": "retry later"}]},
+  "mixed-payload.sql": {"rows": [{"Size": 5, "Key": "k", "Value": "oak", "Trailer": 127}]},
+  "tolerant-binary.sql": {"rows": [{"Id": 1, "Value": 42}, {"Id": 2, "Value": null}]},
+  "tolerant-text.sql": {"rows": [{"Id": 1, "Message": "ready"}, {"Id": 2, "Message": null}]},
+  "partial-binary.sql": {"rows": [{"ErrorField": "Value", "BytesConsumed": 1, "Id": 7}]},
+  "partial-text.sql": {"rows": [{"ErrorField": "EndMarker", "BytesConsumed": 3, "Prefix": "OK:"}]},
+  "strict-binary-failure.sql": {"diagnostic": "ISE0001"},
+  "strict-text-failure.sql": {"diagnostic": "ISE0004"},
+  "discovery-samples.sql": {"rows": [{"Id": 1, "CandidateLength": 2}, {"Id": 2, "CandidateLength": 2}, {"Id": 3, "CandidateLength": 2}]}
+}

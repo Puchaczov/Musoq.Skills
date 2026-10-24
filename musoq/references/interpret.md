@@ -1,5 +1,7 @@
 # Parse custom text and binary records
 
+For substantial schema design, debugging, mixed payloads or unknown-format reverse engineering, use `musoq-interpretation` when available. Keep the introductory recipes below for small known-layout queries.
+
 Use ordinary CSV or JSON sources for structured input. Use an interpretation schema for fixed widths, custom delimiters, mixed log lines, or a known binary layout. Run a known fixture directly, then edit its schema and input:
 
 | Need | Executable SQL | Editable inputs | Result shape |

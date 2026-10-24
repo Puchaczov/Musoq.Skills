@@ -76,6 +76,7 @@ See [execution and quoting](references/execution.md) only when passing inputs or
 | CSV, JSON/stdin, file sizes, joins, missing counterparts, duplicates, rankings, comparisons | [Data analysis](references/data.md) |
 | Patterns from a CTE, recursive queries, conditional aggregates, pivots, functions | [Composition](references/composition.md) |
 | Fixed-width text, custom logs, binary layouts, malformed-record counts | [Interpretation](references/interpret.md) |
+| Substantial binary/text schema authoring, debugging, or unknown-format discovery | Use `musoq-interpretation` if installed |
 | Saved SQL, managed scripts, tools, MCP or REST clients | [Reusable queries and tools](references/tools.md) |
 | Repeated observations, filesystem/interval triggers, replay | [Watch](references/watch.md) |
 | A query failed or its results contradict known evidence | [Recovery and inspection](references/recovery.md) |

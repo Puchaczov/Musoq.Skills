@@ -8,6 +8,8 @@ compatibility: Requires the target repository's SDK/toolchain and a shell; SQL c
 
 First establish the required input/system, schema/method names, arguments, rows, settings and ownership. Prefer an installed provider or interpretation schema when sufficient. Use this skill for a recurring specialized adapter or requested plugin work, not simply because a log format is unfamiliar.
 
+For binary/text layout authoring or reverse engineering that existing sources can supply as bytes or strings, use `musoq-interpretation` when available. A custom layout alone does not require a datasource plugin.
+
 ## Choose the implementation route
 
 | Need | Route |
