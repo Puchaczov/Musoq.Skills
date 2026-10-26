@@ -8,6 +8,41 @@ compatibility: Requires a shell, the Musoq CLI, and the providers used by a chos
 
 Use Musoq first for repository discovery, grouped searches, comparisons, and data analysis. Choose the closest task recipe below or in the linked reference, then start the investigation with a Musoq query. Reading that recipe is useful preparation; ordinary searches need no catalog or specification preflight. Read an already identified file directly.
 
+## Syntax at a glance
+
+Choose features that fit the question and use familiar syntax directly. This map covers documented language families, not proof that every feature works in the installed runtime. For unfamiliar syntax, read the relevant section and verify a minimal query; discover provider arguments, columns and registered functions separately.
+
+In **Read more**, `spec / section` means `musoq describe spec <spec> --section <section>`; read only the section needed. Linked references provide task recipes.
+
+| Syntax/features | Useful for | Read more |
+|---|---|---|
+| `schema.method(...)`, derived tables, inline `values { ... }` | Read providers, query intermediate results, create small fixtures | `language / from-clause` |
+| Named arguments, records, `array { ... }`, CTE source arguments | Pass structured inputs or query rows to a source | `language / structured-values-and-source-inputs`; [composition](references/composition.md) |
+| `param(...)` / `params(...)`, `let`, `$name` | Bind typed runtime inputs and compile-time constants | [Execution](references/execution.md); `language / script-parameters`, `script-variables` |
+| `SELECT`, aliases, `*` modifiers, `DISTINCT`; FROM-first syntax | Shape output, deduplicate rows, write clauses starting from the source | `language / select-clause`, `reordered-query-syntax` |
+| Operators, `CASE`, typed/raw literals, `expr::Type`, coercion | Compute values, branch, preserve paths, control types | `language / lexical-elements`, `appendix-f-case-when-requirements`, `data-types`, `automatic-type-coercion` |
+| `IS NULL`, `IS DISTINCT FROM`, `??` | Test missing values, compare nullable fields, supply fallbacks | `language / null-semantics` |
+| Array/string indexing, dictionary keys, property paths, entity methods | Navigate nested data and collections | `language / array-and-property-access` |
+| `WHERE`, boolean/comparison predicates, `BETWEEN`, `LIKE`, `RLIKE`, `CONTAINS`, multi-field pattern quantifiers | Filter rows and match text across fields | `language / where-clause`, `string-comparison-semantics` |
+| `IN` / `NOT IN`, `EXISTS`, scalar subqueries, `ANY` / `SOME` / `ALL` | Test membership, existence, or compare against query results | `language / in-not-in`, `exists-not-exists`, `scalar-subqueries`, `quantified-subqueries-any-some-all` |
+| Inner/left/right/full/cross joins, `SEMI JOIN`, `ANTI JOIN`; `alias IS PRESENT` / `IS MISSING` | Combine datasets, find missing counterparts, classify unmatched rows | `language / join-clause`; [data analysis](references/data.md) |
+| `ASOF JOIN`, `TIE BREAK BY` | Match the nearest preceding/following ordered observation | `language / asof-join` |
+| `CROSS APPLY`, `OUTER APPLY`, correlated derived tables, `WITH ORDINALITY` | Expand collections or per-row queries; retain empty results and positions | `language / apply-clause`; [composition](references/composition.md) |
+| `GROUP BY`, aliases/ordinals/`ALL`, aggregates, `HAVING`, aggregate `FILTER`, parent-level aggregation | Summarize groups and calculate conditional or parent measures | `language / group-by-and-aggregation`; [composition](references/composition.md) |
+| Window ranking/offset/value/aggregate functions, `OVER`, named `WINDOW`, `ROWS` / `RANGE`, `QUALIFY` | Rank within groups, compare neighbors, compute running measures, filter ranked rows | `language / window-functions`; [composition](references/composition.md) |
+| Static `PIVOT` / `UNPIVOT` | Turn categories into columns or columns into rows | `language / pivot-statement`, `unpivot-statement` |
+| `UNION`, `UNION ALL`, `EXCEPT`, `INTERSECT`, explicit comparison keys | Merge or compare result sets using whole rows or selected keys | `language / set-operations` |
+| `WITH` CTEs, `WITH RECURSIVE` | Compose stages, feed source inputs, traverse bounded hierarchies | `language / common-table-expressions-ctes`, `recursive-ctes-and-limitations`; [composition](references/composition.md) |
+| `ORDER BY`, `NULLS FIRST` / `LAST`, `SKIP`, `TAKE` | Sort, page, or bound results | `language / order-by-skip-take` |
+| Scalar functions: text/regex, numeric, date/time, collections, conversions, enum intrinsics | Transform fields with the functions registered for the source context | `language / built-in-functions`; `musoq describe functions <schema> --filter <term>` |
+| `DESC` sources, arguments, functions, settings, nested properties, `DESC QUERY` | Inspect contracts and projected output metadata | `language / desc-statement` |
+| **Optional TABLE/COUPLE profile:** `TABLE`, `COUPLE`, settings profiles | Declare row types and bind source contracts/settings | `table-couple / table-statement`, `couple-statement` |
+| **Optional binary interpretation:** `binary`, `Interpret`, `TryInterpret` | Parse byte layouts into typed fields | `binary-text / binary-schema-syntax`, `interpretation-functions`; [interpretation](references/interpret.md) |
+| **Optional text interpretation:** `text`, `Parse`, `TryParse` | Parse custom records; retain malformed rows with tolerant functions and `OUTER APPLY` | `binary-text / text-schema-syntax`, `interpretation-functions`; [interpretation](references/interpret.md) |
+| **Optional AI interpretation:** `ai`, `Infer`, `TryInfer` | Extract structured fields using a model-backed schema | `language / conformance`, `specification-family` identify the AI specification; obtain its syntax and host support before use |
+
+Optional profiles require host support. The AI profile summary does not supply its grammar: if its specification is absent from the catalog, obtain the matching AI specification before authoring a query. SQL `Infer` is separate from the CLI `musoq infer logs` workflow; model-backed execution must stay within the user's authorized workflow.
+
 ## Run a useful query
 
 Save SQL to a UTF-8 file and run `musoq run <absolute-path-to-query.sql> --from-file --format json`. Edit the root, patterns, scope, or input path below. Resolve the SQL file path before running it; use an absolute provider root when directory or scope resolution is uncertain.
@@ -99,7 +134,7 @@ Choose one narrow command for the missing fact:
 - Source argument shape: `musoq describe arguments search.many --filter patterns`.
 - Actual result columns: `musoq describe source "separatedvalues.comma('orders.csv', true, 0)" --top-level-only`.
 - One function family: `musoq describe functions system --filter Split`.
-- An unfamiliar language feature: `musoq describe search "window" --kind spec --limit 2`, then `musoq describe resource "<returned-uri>"`. On a CLI with `--read`, use `musoq describe search "window" --kind spec --read` instead. See the [capability map](references/composition.md) for short feature terms.
+- An unfamiliar language feature: `musoq describe search "window" --kind spec --limit 2`, then `musoq describe resource "<returned-uri>"`. On a CLI with `--read`, use `musoq describe search "window" --kind spec --read` instead. See [syntax at a glance](#syntax-at-a-glance) for feature names and focused specification sections.
 - An unfamiliar task recipe on a CLI with `--read`: `musoq describe search "files grouped patterns" --kind recipe --read`.
 - A known recipe or section: `musoq describe recipe cookbook-query-files` or `musoq describe spec language --section recursive-ctes-and-limitations`.
 

@@ -14,16 +14,7 @@
 
 ## Learn the feature needed by the question
 
-| Need | Short catalog term | Authoritative route |
-|---|---|---|
-| Pass records/arrays to a source | `source arguments` | language source-arguments section; exact fields from describe arguments |
-| Feed query rows into another source | `CTE` | language CTE sections and table-couple with-cte-as-argument |
-| Compare sets or correlate evidence | `JOIN` | language join-clause |
-| Expand captures/collections | `APPLY` | language apply-clause |
-| Retain failed parses | `interpretation` | binary-text interpretation-functions (read directly for TryParse) |
-| Compute conditional measures | `FILTER` | language filter-clause-on-aggregates |
-| Rank/sample within topics | `window` or `QUALIFY` | language window-functions and qualify-clause |
-| Follow bounded dependencies | `recursive` | language recursive-ctes-and-limitations |
+Use [syntax at a glance](../SKILL.md#syntax-at-a-glance) to choose a feature and its focused specification section.
 
 Search one short term with `musoq describe search "window" --kind spec --limit 2`, then read the returned URI using `musoq describe resource "<returned-uri>"`. With `--read`, combine lookup and reading. If no match is found, simplify the term or use the named section; do not invent a feature or dump all specifications. Verify a minimal query before composing it into the task, then reuse the observed syntax.
 
