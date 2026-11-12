@@ -7,6 +7,8 @@ description: 'Author, debug, and reverse engineer Musoq binary/text interpretati
 
 Requires a shell and a compatible Musoq CLI. Reverse engineering normally also uses the investigations extension and the `musoq-investigation` skill. Keep small schema edits lightweight; do not create an investigation merely to change a known field width.
 
+For Windows filesystem paths in SQL, prefer JSON-bound parameters when the source supports them; use raw SQL such as `r'C:\temp\new\repo'` for embedded paths so `\r`, `\n`, and `\t` stay literal. The `musoq` skill has fuller shell and JSON examples when available.
+
 ## Choose the entry point
 
 | Request | Start here |

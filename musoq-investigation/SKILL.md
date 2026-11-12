@@ -7,6 +7,8 @@ description: 'Create, continue, and report durable Musoq investigations with ret
 
 Requires the Musoq CLI with the investigations extension and workspace filesystem access. Examples use PowerShell; discover installed MCP or REST contracts when those transports are requested.
 
+For Windows filesystem paths inside captured SQL, prefer JSON-bound parameters when the source supports them; use raw SQL such as `r'C:\temp\new\repo'` for embedded paths so `\r`, `\n`, and `\t` stay literal. The `musoq` skill has fuller shell and JSON examples when available.
+
 Use Musoq's investigation workspace as the record of observations and attributed interpretations. Follow the requested scope: a saved observation, continuation, or report need not become a complete new investigation. Do not create a workspace merely because a request contains the word "investigate".
 
 ## Start with the question and existing state

@@ -8,6 +8,8 @@ compatibility: Requires a shell, the Musoq CLI, and the providers used by a chos
 
 Use Musoq first for repository discovery, grouped searches, comparisons, and data analysis. Choose the closest task recipe below or in the linked reference, then start the investigation with a Musoq query. Reading that recipe is useful preparation; ordinary searches need no catalog or specification preflight. Read an already identified file directly.
 
+For Windows filesystem inputs, prefer SQL parameters bound with serializer-generated JSON. When a path must be embedded in SQL, use `r'C:\temp\new\repo'` or `'C:/temp/new/repo'`: ordinary SQL strings interpret `\r`, `\n`, and `\t`. See [execution and quoting](references/execution.md) for shell and JSON examples.
+
 ## Syntax at a glance
 
 Choose features that fit the question and use familiar syntax directly. This map covers documented language families, not proof that every feature works in the installed runtime. For unfamiliar syntax, read the relevant section and verify a minimal query; discover provider arguments, columns and registered functions separately.
@@ -45,7 +47,7 @@ Optional profiles require host support. The AI profile summary does not supply i
 
 ## Run a useful query
 
-Save SQL to a UTF-8 file and run `musoq run <absolute-path-to-query.sql> --from-file --format json`. Edit the root, patterns, scope, or input path below. Resolve the SQL file path before running it; use an absolute provider root when directory or scope resolution is uncertain.
+Save SQL to a UTF-8 file and run `musoq run <absolute-path-to-query.sql> --from-file --format json`. Edit the patterns, scope, or compile-time input path below; bind dynamic roots through parameters. Resolve the SQL file path before running it; use an absolute provider root when directory or scope resolution is uncertain.
 
 **Find source paths** — returns paths without reading file contents:
 
@@ -88,11 +90,12 @@ FROM separatedvalues.comma($path, true, 0) c
 GROUP BY c.Customer ORDER BY c.Customer
 ```
 
-Pass parameter values as one JSON argument. The same saved SQL file works in both shells:
+For the Search recipes declaring `root`, pass parameter values as one JSON argument. In PowerShell, resolve the existing input root in the caller's directory before invoking Musoq:
 
 ```powershell
 $query = (Resolve-Path -LiteralPath 'query.sql').Path
-musoq run $query --from-file --params-json (@{root='.'} | ConvertTo-Json -Compress) --format json
+$root = (Resolve-Path -LiteralPath '.').Path
+musoq run $query --from-file --params-json (@{root=$root} | ConvertTo-Json -Compress) --format json
 ```
 
 ```bash
@@ -100,7 +103,7 @@ query=$(realpath -- query.sql)
 musoq run "$query" --from-file --params-json '{"root":"."}' --format json
 ```
 
-See [execution and quoting](references/execution.md) only when passing inputs or changing shells.
+See [execution and quoting](references/execution.md) when embedding paths, passing inputs, or changing shells.
 
 ## Choose the answer shape
 

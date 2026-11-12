@@ -1,18 +1,47 @@
 # Execute and bind inputs
 
-Run a reviewed SQL file directly:
+Resolve the SQL file and an existing provider root in the caller's directory before invoking Musoq; the provider may execute from another working directory. With [literal-parameter.sql](../recipes/literal-parameter.sql) saved as `query.sql` and an input directory `./repo`:
 
 ```powershell
 $query = (Resolve-Path -LiteralPath 'query.sql').Path
-musoq run $query --from-file --format json
-musoq run $query --from-file --params-json (@{root='./repo'; needle="café O'Brien"} | ConvertTo-Json -Compress) --format json
+$root = (Resolve-Path -LiteralPath './repo').Path
+musoq run $query --from-file --params-json (@{root=$root; needle="café O'Brien"} | ConvertTo-Json -Compress) --format json
 ```
 
-Use an absolute SQL file path for portable invocation from either shell. Resolve it in the caller's directory before running, especially when the query file and provider inputs live in different directories.
+The recipe declares `param(root: string = '.', needle: string = 'TODO')`. Bind dynamic paths with serializer-generated JSON rather than interpolating them into SQL. Pass the JSON as one argument; the serializer escapes backslashes and quotes for JSON without changing the path value. Do not manually double the backslashes in the value before serialization.
 
-The second command fits [literal-parameter.sql](../recipes/literal-parameter.sql), whose declaration is `param(root: string = '.', needle: string = 'TODO')`. Bind values with JSON; do not paste untrusted values into SQL or build shell command strings. SQL uses `$root`, not shell substitution. An inline PowerShell SQL block uses `@'` on its own opening line and `'@` on its own closing line.
+SQL uses `$root`, not shell substitution. An inline PowerShell SQL block uses `@'` on its own opening line and `'@` on its own closing line.
 
-SQL `r'path'` preserves backslashes. Double a literal apostrophe inside an SQL string. Use `param(...)` for runtime inputs supported by a source; a `let path: string = r'orders.csv'` value is fixed when the query compiles. The CSV recipe uses that form because its provider resolves columns at compilation.
+## Windows paths: SQL, shell, and JSON
+
+Ordinary SQL strings interpret escapes such as `\r`, `\n`, and `\t`; embedding a Windows path can therefore introduce control characters. For a fixed filesystem path inside SQL, use a raw literal to preserve backslashes, or forward slashes for an ordinary drive path. Double a literal apostrophe inside an SQL string, including a raw string.
+
+PowerShell string syntax is separate: `$path = 'C:\temp\new\repo'` preserves backslashes already. Pass native command paths, such as `$query` above, as separate arguments. The `r'...'` prefix belongs only inside SQL. Preserve UNC paths exactly with raw SQL or JSON-bound parameters; do not normalize them by replacing their separators.
+
+Save this string-only round-trip query as `path.sql`:
+
+```sql
+param(path: string)
+SELECT $path AS BoundPath,
+       r'C:\temp\new\O''Brien café\repo' AS RawDrivePath,
+       r'\\server\share\temp\new\O''Brien café' AS RawUncPath,
+       'C:/temp/new/repo' AS ForwardPath
+FROM system.dual() d
+```
+
+Bind the UNC value through JSON:
+
+```powershell
+$query = (Resolve-Path -LiteralPath 'path.sql').Path
+$path = '\\server\share\temp\new\O''Brien café'
+musoq run $query --from-file --params-json (@{path=$path} | ConvertTo-Json -Compress) --format json
+```
+
+`BoundPath` and `RawUncPath` return the same UNC string; `RawDrivePath` retains its backslashes and single apostrophe. This query returns strings without opening any path or contacting a network share. Keep intentional escapes in text and regex expressions unchanged; this guidance concerns filesystem path values.
+
+Use `param(...)` for runtime inputs supported by a source. Keep compile-time paths where metadata discovery requires them: the CSV recipe uses `let path: string = r'orders.csv'` because its provider resolves columns at compilation.
+
+## Bash
 
 Bash equivalents:
 

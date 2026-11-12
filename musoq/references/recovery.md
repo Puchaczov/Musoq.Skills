@@ -10,6 +10,7 @@ Preserve the original command, SQL, exit code and diagnostics. If the user asks 
 | Unknown column | `musoq describe source "<exact-source-call>" --top-level-only` | Project available columns; expand nested collections with APPLY |
 | Unknown function/overload | `musoq describe functions <schema> --filter <name>` | Use the observed signature and argument types |
 | Parser error | Read its location and nearest SQL statement | Fix quoting, declaration order, alias or syntax; read only the named spec section if needed |
+| Filesystem path diagnostic reports a control character (for example, U+000D) | Inspect the original SQL literal and bound path value; see [execution and quoting](execution.md#windows-paths-sql-shell-and-json) | Correct the literal with raw SQL or forward slashes for a drive path, or bind the original path through serialized JSON, then retry the same small query |
 | Search read/encoding/queue failure | Narrow to exact paths or a smaller subtree | Retry a small source once; use a direct file reader/search fallback if progress stops |
 | Connection/instance error | `musoq get instance` and the returned help action | Use the intended existing instance; diagnose before changing state |
 | MQ9001/internal compiler failure | Save minimal reproducer and correlation ID | Use a validated equivalent form or fall back; retain the failure for repair |
@@ -17,6 +18,8 @@ Preserve the original command, SQL, exit code and diagnostics. If the user asks 
 | Malformed CSV/JSON/text/bytes | Read the source-level diagnostic as well as the wrapper | Correct the input or explicitly account for rejected rows |
 
 After two informed corrections without progress, switch to an available tool such as direct file reads, Git, rg or a data parser. State the fallback and any lost completeness. Do not repeatedly widen scans or repeat an unchanged failure.
+
+A generic datasource failure alone does not establish a path-escaping problem; use the reported details before changing path syntax.
 
 For contradictory results, retain exact SQL, parameter/settings bindings, scope and independently expected rows. Reduce to the smallest fixture before inspecting:
 
