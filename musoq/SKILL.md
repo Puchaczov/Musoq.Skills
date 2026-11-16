@@ -1,6 +1,6 @@
 ---
 name: musoq
-description: 'Investigate repositories and data with Musoq SQL: find code and tests, combine searches, compare migration candidates, extract log fields, and discover or extend datasource capabilities. Use for repository discovery, analysis of file collections/data, and reusable or watched queries. Skip this skill when simply reading an already identified file.'
+description: 'Investigate repositories and data with Musoq SQL: find code and tests, combine searches, compare migration candidates, extract log fields, and discover or extend datasource capabilities. Use for repository discovery, analysis of file collections/data, and reusable queries. Use musoq-watch for repeated observations and retained Watch state. Skip this skill when simply reading an already identified file.'
 compatibility: Requires a shell, the Musoq CLI, and the providers used by a chosen recipe.
 ---
 
@@ -116,7 +116,7 @@ See [execution and quoting](references/execution.md) when embedding paths, passi
 | Fixed-width text, custom logs, binary layouts, malformed-record counts | [Interpretation](references/interpret.md) |
 | Substantial binary/text schema authoring, debugging, or unknown-format discovery | Use `musoq-interpretation` if installed |
 | Saved SQL, managed scripts, tools, MCP or REST clients | [Reusable queries and tools](references/tools.md) |
-| Repeated observations, filesystem/interval triggers, replay | [Watch](references/watch.md) |
+| Repeated observations, filesystem/interval/query triggers, rolling state, replay or attach | Use `musoq-watch` if installed; otherwise [Watch basics](references/watch.md) |
 | A query failed or its results contradict known evidence | [Recovery and inspection](references/recovery.md) |
 | Available providers, registry installation, local imports, or a missing capability | [Datasource discovery and extension](references/datasources.md) |
 | Implementing or packaging a datasource plugin | Use `musoq-datasource-authoring` if installed |

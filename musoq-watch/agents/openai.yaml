@@ -1,0 +1,3 @@
+interface:
+  display_name: "Musoq Watch"
+  short_description: "Observe changes, compare snapshots, and replay state"
